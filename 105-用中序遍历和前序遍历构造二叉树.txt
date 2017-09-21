@@ -1,0 +1,23 @@
+TreeNode* buildBaTree(vector<int>& preorder, vector<int>& inorder, int pre_s, int pre_e, int in_s, int in_e)
+{
+	if (pre_s - pre_e > 0 || in_s - in_e > 0)
+		return NULL;
+	
+	int i = in_s;
+	for (; i <= in_e; i++)
+	{
+		if (preorder[pre_s] == inorder[i])
+			break;
+	}
+	TreeNode* root=new TreeNode(preorder[pre_s]);
+	root->left  = buildBaTree(preorder, inorder,        pre_s+1,pre_s+i-in_s, in_s, i-1);
+	root->right = buildBaTree(preorder, inorder, pre_s+i-in_s+1,       pre_e,  i+1,in_e);
+
+	return root;
+}
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+       if(preorder.size()==0||preorder.size()!=inorder.size())
+			return NULL;
+
+	   return buildBaTree(preorder, inorder, 0, preorder.size()-1, 0, inorder.size()-1);
+}

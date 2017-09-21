@@ -1,0 +1,35 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <math.h>
+using namespace std;
+
+int main()
+{
+    int n;
+
+    while(cin>>n)
+    {
+        int r=-1000000,l = 1000000,u=-1000000,d = 1000000;
+        for(int i=0;i<n;i++)
+        {
+            int temp1,temp2;
+            cin>>temp1>>temp2;
+            if(temp1>=u)
+                u = temp1;
+            if(temp1<=d)
+                d = temp1;
+            if(temp2>=r)
+                r = temp2;
+            if(temp2<=l)
+                l = temp2;
+        }
+        long int res = max((u-d),(r-l))*max((u-d),(r-l));
+        cout<<res<<endl;
+
+
+    }
+
+
+    return 0;
+}

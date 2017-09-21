@@ -1,0 +1,58 @@
+
+ struct ListNode {
+    int val;
+     ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+}
+    ListNode* rotateRight(ListNode* head, int k) {
+		ListNode* l1 = head;
+		ListNode* l2 = head;
+		ListNode* position=NULL;
+		ListNode* new_head=NULL;
+		int count = 0;
+		while (l2 != NULL)
+		{
+			if (count == k)
+			{
+				position = l2;
+				break;
+			}
+			l2 = l2->next;
+			count++;
+		}
+		if (k == 0)
+		    return head;
+		if (count == 0)	
+		    return NULL;
+	
+		if (k > count)
+		{
+			k = k%count;
+			l2 = head;
+			count = 0;
+			while (l2 != NULL)
+			{
+				if (count == k)
+				{
+					position = l2;
+					break;
+				}
+				l2 = l2->next;
+				count++;
+			}
+		}
+		if (position != NULL)
+		{
+			while (position->next != NULL)
+			{
+				position = position->next;
+				l1 = l1->next;
+			}
+			position->next = head;
+			new_head = l1->next;
+			l1->next = NULL;
+		}
+		else
+			new_head = head;
+		return new_head;
+	}

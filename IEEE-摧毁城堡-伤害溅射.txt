@@ -1,0 +1,64 @@
+#include <math.h>
+#include <cmath>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+vector< vector<long> > record;
+vector<long> HI;
+vector<long> EI;
+int D,N;
+
+long dfs(int i, bool b, long j)
+{
+    if(i == N)
+        return 0;
+    int temp = b?1:0;
+    if(record[temp][i]!= -1)//(int)
+    {
+        return record[temp][i];
+    }
+    long val1 = max((long)0,(HI[i]-j+D-1)/D);
+    long val2 = max((long)0, (HI[i]-EI[i+1]-j+D-1)/D);
+
+    long answer = min(val1+dfs(i+1, 1, EI[i]), val2+dfs(i+1, 0, 0));
+    record[temp][i] = answer;
+    return answer;
+}
+
+
+int main()
+{
+    int T;
+    cin>>T;
+    for(int k=0;k<T;k++)
+    {
+        cin>>N>>D;
+        for(int i=0;i<N;i++)
+        {
+            long temp;
+            cin>>temp;
+            HI.push_back(temp);
+        }
+        HI.push_back(0);
+        for(int i=0;i<N;i++)
+        {
+            long temp;
+            cin>>temp;
+            EI.push_back(temp);
+        }
+        EI.push_back(0);
+        for(int i=0;i<2;i++)
+        {
+            vector<long>temp(N+1,-1);
+            record.push_back(temp);
+        }
+        cout<<dfs(0,1,0)<<endl;
+        record.clear();
+        HI.clear();
+        EI.clear();
+    }
+    return 0;
+}

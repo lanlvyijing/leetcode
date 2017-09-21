@@ -1,0 +1,15 @@
+void rotate(vector<vector<int>>& matrix) {
+	int len = matrix[1].size();
+
+	for (int i = 0; i<len / 2; i++)
+	{
+		int temp = 0;
+		for (int j = i; j<len - 1-i; j++)
+		{
+			//temp = matrix[len-1-i][j];
+			swap(matrix[i][j], matrix[len - 1 - j][i]);
+			swap(matrix[len - 1 - i][len - 1 - j], matrix[len - 1 - j][i]);
+			swap(matrix[j][len - 1 - i], matrix[len - 1 - i][len - 1 - j]);
+		}
+	}
+}

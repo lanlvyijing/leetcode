@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <iomanip>
+#include <math.h>
+#include <sstream>
+#include<fstream>
+#include <stack>
+using namespace std;
+
+/*stringstream stream;
+stream<<shu;
+string temp=stream.str();   //此处也可以用 stream>>string_temp*/
+
+//维护一个栈，遍历每个高度，比栈顶大就入栈其编号，比栈顶小就以栈顶为高，出栈，左边为栈顶索引，右边为当前索引减1
+
+int main()
+{
+    int n;
+    while(cin>>n)
+    {
+        vector<int>hi(n,0);
+        for(int i=0;i<n;i++)
+        {
+            cin>>hi[i];
+        }
+        int min_h=10000;
+        int max_sp=0;
+        int ans=0;
+        int j=0,i=0;
+        int h_now=hi[0];
+        int len=1;
+        stack<int>stk;
+        while(i<hi.size())
+        {
+            if(stk.empty()||hi[stk.top()]<=hi[i])
+            {
+                stk.push(i++);
+            }
+            else
+            {
+                int s_top = stk.top();
+                stk.pop();
+                int hxw = hi[s_top]*(stk.empty()?1:i-stk.top()-1);
+                max_sp= max(max_sp,hxw);
+            }
+        }
+        while(!stk.empty())
+        {
+            int s_top = stk.top();
+            stk.pop();
+            int hxw = hi[s_top]*(stk.empty()?1:i-stk.top()-1);
+            max_sp= max(max_sp,hxw);
+        }
+        cout<<max_sp<<endl;
+    }
+
+    return 0;
+}

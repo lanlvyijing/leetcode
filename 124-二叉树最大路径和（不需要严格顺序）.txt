@@ -1,0 +1,29 @@
+int max_t = -60000; 
+    int maxSum(TreeNode root) {  
+        if(&root==NULL)   
+            return 0;  
+        int  value  = root.val;  
+        int  lmax = 0;  
+        int  rmax = 0;  
+        if(root.left) {  
+            lmax = maxSum(*root.left);  
+            if(lmax>0)  
+                value  += lmax;  
+        }  
+          
+        if(root.right) {  
+            rmax = maxSum(*root.right);  
+            if(rmax>0) {  
+                value  += rmax;  
+            }  
+        }  
+        if (value>max_t) 
+            max_t = value;  
+        return  max(root.val,max(root.val + lmax, root.val + rmax));  
+    } 
+    int maxPathSum(TreeNode* root) {
+        if(!root)  
+            return 0;  
+        maxSum(*root);  
+        return max_t;  
+    }

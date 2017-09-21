@@ -1,0 +1,55 @@
+void solveSudoku(vector<vector<char>>& board) {
+        for(int i = 0; i < 9; i++)
+            for(int j = 0; j < 9; j++)
+                if(board[i][j] != '.')
+                    fill(i, j, board[i][j] - '0');
+                solver(board, 0);
+    }
+    bool solver(vector<vector<char> > &board, int index)//递归填格子，如果可行，继续填下一个格子
+    {// 0 <= index <= 80，index表示接下来要填充第index个格子
+        if(index > 80)
+            return true;
+        int row = index / 9, col = index - 9*row;
+        
+        if(board[row][col] != '.')//不是空的，则继续填下一个格子，有效格子+1
+            return solver(board, index+1);
+            
+        for(int val = '1'; val <= '9'; val++)//每个为填充的格子有9种可能的填充数字
+        {
+            if(isValid(row, col, val-'0'))
+            {
+                board[row][col] = val;
+                fill(row, col, val-'0');
+                if(solver(board, index+1))//如果下一个空格填充成功则返回真
+                    return true;
+                clear(row, col, val-'0');//下个空格失败，返回上一步并把本次填充的数字抹去
+            }
+        }
+        board[row][col] = '.';//注意别忘了恢复board状态
+        return false;
+  }
+  
+  //判断在第row行col列填充数字val后，是否是合法的状态
+  bool isValid(int row, int col, int val)
+  {
+      //分别按照行、列、方格来检测是否合格，都不曾出现过才合法
+        if(rowValid[row][val] == 0 && columnValid[col][val] == 0 && subBoardValid[row/3*3+col/3][val] == 0)
+            return true;
+        return false;
+  }
+    void fill(int row, int col, int val)
+    {
+        rowValid[row][val] = 1;
+        columnValid[col][val] = 1;
+        subBoardValid[row/3*3+col/3][val] = 1;
+    }
+    void clear(int row, int col, int val)
+    {
+        rowValid[row][val] = 0;
+        columnValid[col][val] = 0;
+        subBoardValid[row/3*3+col/3][val] = 0;
+    }
+
+    int rowValid[9][10];//rowValid[i][j]表示第i行数字j是否已经使用
+    int columnValid[9][10];//columnValid[i][j]表示第i列数字j是否已经使用
+    int subBoardValid[9][10];//subBoardValid[i][j]表示第i个小格子内数字j是否已经使用

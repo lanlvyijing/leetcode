@@ -1,0 +1,35 @@
+class BinarySearch {
+public:
+    
+    int find_2(vector<int> A,  int val, int l,int r)
+    {
+        if(A[l]>val||A[r]<val)
+            return -1;
+        if(A[(l+r)/2]==val)
+            return (l+r)/2;
+        int temp = find_2(A, val,l,(l+r)/2);
+        if(temp!=-1)
+            return temp;
+        temp = find_2(A, val, (l+r)/2+1, r);
+        if(temp!=-1)
+            return temp;
+        return -1;
+    }
+   
+    
+    int getPos(vector<int> A, int n, int val) {
+        // write code here
+        int temp = find_2(A, val,0,n-1);
+        int res = temp;
+        if(temp!=-1)
+        {
+            for(int i=temp;i>=0;i--)
+            {
+                if(A[i]==A[temp])
+                    res = i;
+            }
+            
+        }
+        return res;
+    }
+};

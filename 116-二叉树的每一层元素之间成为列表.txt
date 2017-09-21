@@ -1,0 +1,31 @@
+struct TreeLinkNode {
+	int val;
+	TreeLinkNode *left, *right, *next;
+	TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+};
+void connect(TreeLinkNode *root) {
+	queue<TreeLinkNode*>q1;
+	TreeLinkNode* temp = root;
+	if (root != NULL){
+		q1.push(temp);
+		do
+		{
+			queue<TreeLinkNode*>q2;
+			TreeLinkNode* temp_for = NULL;
+			while (!q1.empty())
+			{
+				temp = q1.front();
+				q1.pop();
+				if (temp_for)
+					temp_for->next = temp;
+				temp_for = temp;
+				if (temp->left)
+					q2.push(temp->left);
+				if (temp->right)
+					q2.push(temp->right);
+			}
+			q1 = q2;
+
+		} while (!q1.empty());
+	}
+}

@@ -1,0 +1,34 @@
+#include <math.h>
+#include <cmath>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+    int T;
+    cin>>T;
+    for(int k=0;k<T;k++)
+    {
+        int R,C;
+        cin>>R>>C;
+        vector< vector<char> >ch;
+        for(int i=0;i<R;i++)
+        {
+            vector<char>ch_temp(C,0);
+            for(int j=0;j<C;j++)
+                cin>>ch_temp[j];
+            ch.push_back(ch_temp);
+        }
+        cout<<"Test "<<k+1<<endl;
+        for(int i=R-1;i>=0;i--)
+        {
+            for(int j=C-1;j>=0;j--)
+                cout<<ch[i][j];
+            cout<<endl;
+        }
+    }
+    return 0;
+}

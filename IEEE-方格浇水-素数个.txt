@@ -1,0 +1,65 @@
+#include <math.h>
+#include <cmath>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+#define max_people 100000
+int pre[max_people*3];
+int ai_vec[max_people+1];
+bool IsPrimer(int   n)
+{
+      int  m=sqrt(n);
+      for(int i=2;i<=m;i++)
+      {
+          if(n%i==0)   return   false;
+      }
+      return   true;
+  }
+
+
+int main()
+{
+    int T;
+    cin>>T;
+    for(int k=0;k<T;k++)
+    {
+        int N,D;
+        cin>>N>>D;
+        vector< vector<int> >data;
+        vector<int>first(2,0);
+        data.push_back(first);
+        for(int l=0;l<N;l++)
+        {
+            vector<int>temp(2,0);
+            cin>>temp[0]>>temp[1];
+            data.push_back(temp);
+        }
+        int res=0;
+        double dis=0;
+        for(int i=1;i<=N;i++)
+        {
+            dis+=sqrt(pow((data[i][0]-data[i-1][0]),2)+pow((data[i][1]-data[i-1][1]),2));
+            if(dis>D)
+                break;
+            res++;
+        }
+        if(res<=1)
+        {
+            cout<<0<<endl;
+            continue;
+        }
+        for(int i=res;i>1;i--)
+        {
+            if(IsPrimer(i))
+            {
+                cout<<i<<endl;
+                break;
+            }
+        }
+
+    }
+
+    return 0;
+}

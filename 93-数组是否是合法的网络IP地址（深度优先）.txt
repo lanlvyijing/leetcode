@@ -1,0 +1,41 @@
+ vector<string>res;
+void dfs(string s, int m, int n, int k, string now)
+{
+	if (n >= s.length())
+		return;
+	if (n == s.length()&&k <= 2)
+		return;
+	if (k == 0)
+	{
+		if (atoi((s.substr(m, n - m + 1)).c_str())<256 
+			&& (now + s.substr(m, n - m + 1)).length()==s.length()+3)
+		{
+		    string temp = s.substr(m, n - m + 1);
+		    if (temp[0] == '0'&&temp.length() >= 2)
+			    return;
+			res.push_back(now + s.substr(m, n - m + 1));
+			return;
+		}
+	}
+	if (atoi((s.substr(m, n-m+1)).c_str())<256)
+	{
+		string temp = s.substr(m, n - m + 1);
+		if (temp[0] == '0'&&temp.length() >= 2)
+			return;
+		dfs(s, n+1, n + 1, k - 1, now + s.substr(m, n-m+1) + "." );
+	}
+	else
+		return;
+	dfs(s, m, n + 1, k, now );
+
+}
+
+vector<string> restoreIpAddresses(string s) {
+	int len = s.length();
+	if (len<4 || len>12)
+		return res;
+	string now ="";
+	now += s[0];
+	dfs(s, 0, 0, 3, "");
+	return res;
+}

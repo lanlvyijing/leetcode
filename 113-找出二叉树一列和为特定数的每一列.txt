@@ -1,0 +1,29 @@
+vector<vector<int>> res;
+void dfs(TreeNode* root,int sum_now,int sum,vector<int>path)
+    {
+        path.push_back(root->val);
+        if(root->val+sum_now==sum&&root->left==NULL&&root->right==NULL)
+        {
+            res.push_back(path);
+            return ;
+        }
+        if(root->left)
+        {
+           dfs(root->left,root->val+sum_now,sum,path);
+        }
+        if(root->right)
+        {
+           dfs(root->right,root->val+sum_now,sum,path);
+        }
+        path.pop_back();
+        return;
+
+    }
+    
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        vector<int>path;
+        if(root==NULL)
+            return res;
+        dfs(root,0,sum,path);
+        return res;
+    }

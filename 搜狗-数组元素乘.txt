@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+
+int main()
+{
+    int n,m;
+    while(cin>>n>>m)
+    {
+        vector<long>row(n,1);
+        vector<long>col(m,1);
+        vector<long>row_2(n,0);
+        vector<long>col_2(m,0);
+       vector< vector<int> >data;
+       for(int i=0;i<n;i++)
+       {
+           vector<int>temp(m,0);
+            for(int j=0;j<m;j++)
+            {
+                cin>>temp[j];
+                if(temp[j]==0)
+                {
+                    row_2[i]++;
+                    col_2[j]++;
+                    if(row_2[i]>=2)
+                        row[i]=0;
+                    if(col_2[i]>=2)
+                        col[i]=0;
+                    continue;
+                }
+                row[i]*=temp[j];
+                col[j]*=temp[j];
+            }
+            data.push_back(temp);
+       }
+      /* for(int i=0;i<n;i++)
+       {
+         cout<<row[i]<<" ";
+        }
+        cout<<endl;
+       for(int j=0;j<m;j++)
+        {
+            cout<<col[j]<<" ";
+        }
+        cout<<endl;*/
+       long res=0;
+       for(int i=0;i<n;i++)
+       {
+            for(int j=0;j<m;j++)
+            {
+                int temp=data[i][j];
+                if(data[i][j]==0)
+                    temp=1;
+                if(res<((row[i]*col[j])/temp)/temp)
+                    res=((row[i]*col[j])/temp)/temp;
+            }
+       }
+       cout<<res<<endl;;
+
+    }
+
+    return 0;
+}

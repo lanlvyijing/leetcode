@@ -1,0 +1,18 @@
+vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int> > result;
+        vector<int> path;
+        int n = nums.size();
+        result.push_back(path);
+        dfs(n, 0, 0, path, result,nums);
+        return result;
+    }
+
+    static void dfs(int n, int start, int cur,vector<int> &path, vector<vector<int> > &result, vector<int>& nums) {
+        
+        for (int i = start; i < n; ++i) {
+            path.push_back(nums[i]);
+            result.push_back(path);
+            dfs(n, i + 1, cur + 1, path, result,nums);
+            path.pop_back();
+        }
+    }

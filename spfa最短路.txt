@@ -1,0 +1,140 @@
+
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <cstring>
+#include <queue>
+#include <stdlib.h>
+#include <time.h>
+#include <algorithm>
+using namespace std;
+#define inf INF
+
+const int MAXN = 6;
+const int MAXM = 6 * 6;
+const int INF = 0x3f3f3f3f;;
+
+struct node
+{
+	int u, v,cost, next;
+
+}Edge[1000];
+
+int pre[MAXN];          
+int dis[MAXN];          
+int vis[MAXN];         
+int path[MAXN];
+int head[MAXN];
+int NE=0;
+
+void addEdge(int u, int v, int cost)
+{
+	if (cost == 1000)
+	{
+		cost = INF;
+	}
+	if (cost == 0)
+	{
+		return;
+	}
+	Edge[NE].u = u;         
+	Edge[NE].v=v;           
+	Edge[NE].cost=cost;  
+	Edge[NE].next =head[u];//
+	head[u] = NE++;
+	
+}
+
+
+
+int SPFA(int s, int t,int w)                 
+{
+	int i;
+	memset(dis, inf, sizeof(dis));
+	memset(vis, 0, sizeof(vis));
+	memset(pre, -1, sizeof(pre));
+	dis[s] = 0;
+	queue<int>q;
+	q.push(s);
+	vis[s] = 1;
+
+	while (!q.empty())       
+	{
+		int u = q.front();
+		q.pop(); 
+		vis[u] = 0; 
+		for(i=head[u]; i!=-1;i=Edge[i].next)
+		{
+
+			int v = Edge[i].v;
+			if (v == w)
+			{
+				continue;
+			}
+			if ( dis[v]>dis[u] + Edge[i].cost)
+			{
+				dis[v] = dis[u] + Edge[i].cost;
+				pre[v] = u;                    
+				path[v] = i;                    
+				if (!vis[v])                  
+				{
+					vis[v] = 1;
+					q.push(v);
+				}
+			}
+		}
+	}
+	if (pre[t] == -1)
+		return false;
+	return true;
+}
+void end_spfa(int s, int t)
+{
+	int u, sum = inf, per_cost = 0;
+	for (u = t; u != s; u = pre[u])
+	{
+		cout << u+1 << " ";
+	}
+	cout << s+1 << endl;
+
+}
+
+
+void format()
+{
+	
+	long int i = 4;
+	int a[6][6] = { { 0, 2, 10, 5, 3, 1000 }, { 1000, 0, 12, 1000, 1000, 10 }, { 1000, 1000, 1000, 0, 7, 1000 }
+	, { 2, 1000, 1000, 0, 2, 1000 }, { 4, 1000, 1000, 1, 0, 1000 }, { 3, 1000, 1, 1000, 2, 0 } };
+	for (int i=0; i < 6; i++)
+	{
+		for (int j = 0; j < 6;j++)
+			addEdge(i,j,a[i][j]);
+	}
+	
+}
+
+
+int main()
+{
+	int pre_sum = INF;
+
+	memset(head, -1, sizeof(head));
+	format();
+
+	
+	int x,w,s=4;
+	while (cin >> x>>w)
+	{
+		x--;
+		w--;
+		
+		SPFA(s, x,w);
+		end_spfa(s,x);
+	}
+
+
+	return 1;
+}

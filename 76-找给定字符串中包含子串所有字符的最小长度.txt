@@ -1,0 +1,39 @@
+string minWindow(string s, string t) {
+	vector<int> srcHash(255, 0);
+	// 记录目标字符串每个字母出现次数
+	
+	for (int j = 0; j < t.length(); j++){
+		
+		srcHash[t[j]]++;
+	}
+	int start = 0, i = 0;
+	// 用于记录窗口内每个字母出现次数 
+	vector<int> destHash(255, 0);
+	int found = 0;
+	int begin = 0, end = s.length(), minLength = s.length()+1;
+
+	for (start = 0; i < s.length(); ++i){
+        if (srcHash[s[i]] == 0)  
+            continue;
+		++destHash[s[i]];
+		if (destHash[s[i]] <= srcHash[s[i]]) 
+			++found;
+		if (found == t.length())
+		{
+			while (srcHash[s[start]]==0|| destHash[s[start]] > srcHash[s[start]])
+			{
+				if(destHash[s[start]] > srcHash[s[start]])
+				    --destHash[s[start]];
+				++start;
+			}
+			if (i - start+1 < minLength){
+				minLength = i - start+1;
+				begin = start;
+				end = i;
+			}
+			
+		}
+	}
+	// 如果begin没有修改过，返回空
+	return minLength<=s.length() ? s.substr(begin, end-begin+1 ):"";
+}

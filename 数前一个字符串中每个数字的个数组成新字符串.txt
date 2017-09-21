@@ -1,0 +1,81 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string> 
+#include <unordered_map>
+#include <queue>
+#include <stack>
+#include <sstream>
+#include <unordered_map>
+using namespace std;
+string find_str(string before, int turn, int n)
+{
+	vector<int> num_count(9, 0);
+	char pre = before[0];
+	int count=1;
+	string now = "";
+	if (before.length() == 1)
+	{
+		if (n == 2)
+			return "11";
+		else
+			return find_str("11", 3, n);
+	}
+	for (int i = 1; i < before.length(); i++)
+	{
+		if (i == before.length()-1)
+		{
+			stringstream ss;
+			string str;
+			if (pre == before[i])
+			{
+				count++;
+				ss << count * 10 + pre-'0';
+				ss >> str;
+				now += str;
+				break;
+			}
+			else
+			{
+				ss << (count  * 10 + pre - '0') * 100 + 10 + before[i] - '0';
+				ss >> str;
+				now += str;
+				break;
+			}
+		}
+		if (pre == before[i])
+		{
+			count++;
+		}
+		else
+		{
+			stringstream ss;
+			string str;
+			ss << count * 10 + pre - '0';
+			ss >> str;
+			now += str;
+			count = 1;
+			pre = before[i];
+		}
+	}
+	if (n == turn)
+		return now;
+	else
+		return find_str(now, turn + 1, n);
+}
+
+string countAndSay(int n) {
+	string now = "1";
+	if (n == 1)
+		return "1";
+	return find_str(now, 2, n);
+}
+
+int main()
+{
+	string now = countAndSay(5);
+
+
+	cin.get();
+	return 1;
+}

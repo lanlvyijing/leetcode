@@ -1,0 +1,25 @@
+int maxDepth(TreeNode* root) {
+        queue<TreeNode*>q1;
+        TreeNode* temp = root;
+        if(temp==NULL)
+            return 0;
+        int depth=1; 
+        q1.push(temp);
+        do
+        {
+            queue<TreeNode*>q2;
+            while(!q1.empty())
+            {
+                temp = q1.front();
+                q1.pop();
+                if(temp->left)
+                    q2.push(temp->left);
+                if(temp->right)
+                    q2.push(temp->right);
+            }
+            
+            q1 = q2;
+            depth++;
+        }while(!q1.empty());
+        return depth-1;
+    }

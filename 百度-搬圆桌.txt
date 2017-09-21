@@ -1,0 +1,22 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <math.h>
+using namespace std;
+
+int main()
+{
+    int r,x,y,x1,y1;
+
+    while(cin>>r>>x>>y>>x1>>y1)
+    {
+        double dis = sqrt((double)(x-x1)*(x-x1)+(double)(y-y1)*(y-y1));
+            
+        cout<<(int)ceil(dis/(2*r))<<endl;
+
+
+    }
+
+
+    return 0;
+}

@@ -1,0 +1,28 @@
+vector<string>last;
+    vector<string> gray(int k,int n,vector<string>res)
+    {
+
+        vector<string>temp(pow(2,k+1));
+     	for(int i=0;i<pow(2,k);i++)
+        {
+            temp[i]='0'+res[i];
+        }
+        for(int i=pow(2,k)-1;i>=0;i--)
+        {
+            temp[i+res.size()]='1'+res[res.size()-1-i];
+        }
+        if(k==n)
+        {
+            vector<string>last=res;
+            return res;
+        }
+        return gray(k+1,n,temp);
+    }
+    vector<string> getGray(int n) {
+        // write code here
+        vector<string>temp;
+        temp.push_back("0");
+        temp.push_back("1");
+
+        return gray(1,n,temp);
+    }

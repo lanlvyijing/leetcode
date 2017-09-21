@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string> 
+#include <unordered_map>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+int find_2(vector<int>& nums, int start, int end, int target)
+{
+
+	if (end - start == 0)
+	{
+		if (nums[start] == target)
+		{
+
+			return start;
+		}
+		else if (nums[start] > target)
+			return start;
+		else if (nums[start] < target)
+			return start + 1;
+	}
+
+	int mid = (end + start) / 2;
+
+	if (nums[mid] >= target)
+	{
+		if (start <= mid - 1)
+			return find_2(nums, start, mid - 1, target);
+		else
+			return start;
+	}
+	else if (nums[mid] <= target)
+	{
+		if (end >= mid - 1)
+			return find_2(nums, mid + 1, end, target);
+		else
+			return end;
+	}
+	//return 1;
+
+}
+
+int searchInsert(vector<int>& nums, int target) {
+	int res = find_2(nums, 0, nums.size() - 1, target);
+
+	return res;
+}
+
+int main()
+{
+	vector<int> nums;
+	nums.push_back(5);
+	//nums.push_back(7);
+	//nums.push_back(8);
+	//nums.push_back(9);
+	//nums.push_back(10);
+	int res = searchInsert(nums, 9);
+
+	cin.get();
+	return 1;
+}

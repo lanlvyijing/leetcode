@@ -1,0 +1,58 @@
+class Solution {
+public:
+    /**
+     * 返回git树上两点的最近分割点
+     * 
+     * @param matrix 接邻矩阵，表示git树，matrix[i][j] == '1' 当且仅当git树中第i个和第j个节点有连接，节点0为git树的跟节点
+     * @param indexA 节点A的index
+     * @param indexB 节点B的index
+     * @return 整型
+     */
+    bool flag[1024];
+    
+    int find_root(vector<string> matrix,int index)
+    {
+        if(index == 0)
+        {
+            flag[index]=1;
+            return 0;
+    	}
+      	
+        for(int i=0;i<matrix.size();i++)
+        {
+            if(matrix[i][index]=='1')
+            {
+                if(flag[index]==1)
+                {
+                    return index;
+                }
+                flag[index]=1;
+                return find_root(matrix,i);
+            }
+        }
+        return index;
+        
+        
+    }
+    void turn_no_vec(vector<string> &matrix,int r,int n)
+    {
+        for(int i=0;i<n;i++)
+        {
+             if(matrix[r][i]=='1')
+             {
+              	matrix[i][r]='0';     
+                 turn_no_vec(matrix,i,n);
+             }
+        }
+        return ;
+    }
+    
+    int getSplitNode(vector<string> matrix, int indexA, int indexB) {
+        int n = matrix.size();
+        turn_no_vec(matrix,0,n);
+        memset(flag,0,sizeof(flag));
+        find_root(matrix,indexA);
+        return find_root(matrix,indexB);
+
+    }
+};

@@ -1,0 +1,49 @@
+void Inversion(ListNode* &Head)
+	{
+		if (Head == 0||Head->next==0)
+			return;
+		
+		ListNode *current=Head, *Next = Head->next;
+		
+		while (Next != NULL)
+		{
+			ListNode *tmp = Next->next;
+			Next->next = current;
+			current = Next;
+			Next = tmp;
+		}
+		Head->next = NULL;
+		Head = current;
+	}
+	void reorderList(ListNode* head) {
+		ListNode* l1 = head;
+		ListNode* l2 = head;
+		int count = 0;
+		if (l2 == NULL)
+			return;
+		while (l2->next != NULL)
+		{
+			l2 = l2->next;
+			count++;
+		}
+		int mid = count / 2;
+		int i = 0;
+		while (i<mid)
+		{
+			l1=l1->next;
+			i++;
+		}
+		l2 = l1->next;
+		l1->next = NULL;
+		l1 = head;
+		Inversion(l2);
+		while (l1 != NULL&&l2!=NULL)
+		{
+			ListNode* temp1 = l1->next;
+			ListNode* temp2 = l2->next;
+			l1->next = l2;
+			l2->next = temp1;
+			l2 = temp2;
+			l1 = temp1;
+		}
+	}

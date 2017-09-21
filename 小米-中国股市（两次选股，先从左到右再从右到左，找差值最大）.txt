@@ -1,0 +1,46 @@
+class Solution {
+public:
+    /**
+     * 计算你能获得的最大收益
+     * 
+     * @param prices Prices[i]即第i天的股价
+     * @return 整型
+     */
+    int calculateMax(vector<int> prices) {
+		int max1 = 0;
+        int min1 = 100000;
+        int vec_l[prices.size()];
+        int vec_r[prices.size()];
+        memset(vec_l,0,sizeof(vec_l));
+        memset(vec_r,0,sizeof(vec_l));
+        for(int i=0;i<prices.size();i++)
+        {
+            if(prices[i]<min1)
+                min1 = prices[i];
+            if(max1<prices[i]-min1)
+                max1 = prices[i]-min1;
+           	vec_l[i] = max1;
+        }
+        int max2 = 0;
+        int min2 = 0;
+        for(int i=prices.size()-1;i>=0;i--)
+        {
+            if(prices[i]>max2)
+                max2 = prices[i];
+            if(max2-prices[i]>min2)
+                min2 = max2-prices[i];
+          	vec_r[i] = min2;
+            
+        }
+        int res = 0;
+        for(int i=0;i<prices.size();i++)
+        {
+            if(vec_l[i]+vec_r[i]>res)
+                res = vec_l[i]+vec_r[i];
+            
+        }
+        
+        return res;
+        
+    }
+};

@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <iomanip>
+#include <math.h>
+#include <sstream>
+#include<fstream>
+#include <stack>
+#include <string.h>
+using namespace std;
+
+/*stringstream stream;
+stream<<shu;
+string temp=stream.str();   //此处也可以用 stream>>string_temp*/
+
+
+int main()
+{
+    string str1;
+    string str2;
+    while(getline(cin,str1))
+    {
+       getline(cin,str2);
+       int ans=0;
+       int l1 = str1.length();
+       int l2 = str2.length();
+       int data[l1+1][l2+1];
+       memset(data,0,sizeof(data));
+       for(int i=1;i<=l1;i++)
+       {
+            for(int j=1;j<=l2;j++)
+            {
+                if(str1[i-1]==str2[j-1])
+                {
+                    data[i][j]=data[i-1][j-1]+1;
+                    if(data[i][j]>ans)
+                        ans=data[i][j];
+                }
+                /*cout<<"i= "<<i<<" j= "<<j<<endl;
+                for(int m=0;m<=l1;m++)
+                {
+                    for(int n=0;n<=l2;n++)
+                    {
+                        cout<<data[m][n]<<" ";
+                    }
+                    cout<<endl;
+                }*/
+
+            }
+       }
+       cout<<ans<<endl;
+    }
+
+    return 0;
+}

@@ -1,0 +1,14 @@
+int maxProfit(vector<int>& prices) {
+        int l2=0;
+        int res=0;
+        int len = prices.size();
+        int small=10000;
+        while(l2!=len)
+        {
+ 
+            small = min(small,prices[l2]);
+            res = max(res,prices[l2]-small);
+            l2++;
+        }
+        return res;
+    }

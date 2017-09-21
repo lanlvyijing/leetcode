@@ -1,0 +1,28 @@
+ int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        const int m=obstacleGrid.size();  
+        const int n=obstacleGrid[0].size();  
+  
+        if(obstacleGrid[0][0] || obstacleGrid[m-1][n-1] ) return 0;  //起始格与终止格是否为障碍
+        vector<int> f(n,0);  
+        //需要找到第一列首个1在哪，之后f[0]均设为0  
+        int first_col_obstacle;  
+        for(int i=0;i<m;i++)  
+            if(obstacleGrid[i][0]==1){  
+                first_col_obstacle=i;  
+                break;  
+            }  
+  
+        for(int i=0;i<m;i++){  
+            if(i>=first_col_obstacle)  
+                f[0]=0;  
+            else  
+                f[0]=1;  
+            for(int j=1;j<n;j++){  
+               if(obstacleGrid[i][j]==1)  
+                   f[j]=0;  
+               else  
+                   f[j]= f[j-1]+f[j];  
+            }  
+        }  
+        return f[n-1]; 
+    }

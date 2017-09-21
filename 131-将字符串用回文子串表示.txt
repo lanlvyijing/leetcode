@@ -1,0 +1,54 @@
+
+	string split(string& str, int begin, int end)
+	{
+		string res;
+		for (int i = begin; i <= end; i++)
+		{
+			res += str[i];
+		}
+		return res;
+	}
+	void DFS(string s, int i, vector<string> now_s, vector<vector<string>> &now_v, vector<vector<bool>>dp)
+	{
+		if (i == s.length())
+		{
+			now_v.push_back(now_s);
+			return;
+		}
+		for (int j = i; j<s.length(); j++)
+		{
+			if (dp[i][j] == 1)
+			{
+				now_s.push_back(split(s, i, j));
+				DFS(s, j + 1, now_s, now_v, dp);
+				now_s.pop_back();
+			}
+		}
+
+	}
+	vector<vector<string>> partition(string s) {
+		vector<string> now_s;
+		vector<vector<string>> now_v;
+		const int m = s.length();
+		const int n = m;
+		vector<vector <bool> > dp(m, vector<bool>(n, 0));
+		for (int i = 0; i<m; i++)
+		{
+			for (int j = i; j<m; j++)
+			{
+				int k = 0;
+				for (; k<(j - i + 1) / 2; k++)
+				{
+					if (s[i + k] != s[j - k])
+					{
+						break;
+					}
+
+				}
+				if (k == (j - i + 1) / 2)
+					dp[i][j] = 1;
+			}
+		}
+		DFS(s, 0, now_s, now_v, dp);
+		return now_v;
+	}

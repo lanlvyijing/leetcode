@@ -1,0 +1,21 @@
+vector<vector<int>> res;
+    int N;
+    void perm(vector<int>&nums,int i)
+    {
+        if(i == N)
+            res.push_back(nums);
+        for(int j = i;j<N;j++)
+        {
+            swap(nums[i],nums[j]);
+            perm(nums,i+1);
+            swap(nums[i],nums[j]);
+        }
+        
+    }
+    
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        N = nums.size();
+        sort(nums.begin(),nums.end());
+        perm(nums,0);
+        return res;
+    }
