@@ -1,0 +1,136 @@
+%Real-time American Sign Language Recognition Using Wrist-worn Motion and Surface EMG Sensors
+
+clc;
+close all;
+%%
+load('lpass.mat')
+ex = importdata('D:\9-移动计算中心\肌电资料\myo_mcc\上下位机\0601\c++_code\Debug\EMG\20170601_170651_伸掌.txt');
+[ex_row,ex_col] = size(ex)
+sample_rate = 440;
+x = 0:1:ex_row;
+x = x(1:length(x)-1);
+y = ex(:,1)-1.5;
+y=filter(Num,1,y);
+fs=440;
+
+[MF_total,MPF_total]=get_Median_Frequency(y,fs)
+
+n=32;%一个窗的大小
+E_cnt=fix(ex_row/n);
+Ei=zeros(E_cnt,1);
+for i=1:1:E_cnt
+    for j=1:1:n
+        Ei(i)=Ei(i)+y((i-1)*n+j)*y((i-1)*n+j);
+    end
+    Ei(i)=Ei(i)/n;
+end   
+figure('NumberTitle', 'off', 'Name', '信号能量分段图');
+plot(Ei);
+hold on;
+
+a=0.25;
+b=5;
+T=0.004;
+E_avr_5=0;
+start=1;
+total_emg_ack=0;
+cnt_high=0;
+begin_CNT=4;
+end_CNT=2;
+segment_matrix=zeros(100,2);
+for i=1:1:E_cnt-4
+    if(Ei(i)>T)
+        cnt_high=cnt_high+1;
+    else
+        cnt_high=0;
+    end
+    
+    if(cnt_high==begin_CNT)
+        segment_matrix(total_emg_ack+1,1)=i-(begin_CNT-1);
+        cnt_less_T=0;
+        while(cnt_less_T<end_CNT&&i<E_cnt-4)
+            i=i+1;
+            if(Ei(i)<T)
+                cnt_less_T=cnt_less_T+1;
+            else
+                cnt_less_T=0;
+            end
+        end 
+        if(cnt_less_T==end_CNT)
+            segment_matrix(total_emg_ack+1,2)=i-(end_CNT-1);
+            total_emg_ack=total_emg_ack+1;
+            line([segment_matrix(total_emg_ack,1),segment_matrix(total_emg_ack,2)],[T,T])
+            hold on;            
+        end
+    end
+    %动态更新阀域算法
+    for j=0:1:4
+        E_avr_5=E_avr_5 + Ei(i+j);
+    end
+    E_avr_5=E_avr_5/5;
+     if E_avr_5<a*T;
+         T=b*E_avr_5;
+     end
+    
+    E_avr_5=0;
+end
+total_emg_ack;
+segment_matrix    ;
+
+figure('NumberTitle', 'off', 'Name', '原始信号分段图');
+plot(x,y,'r','LineWidth',0.5);
+hold on;
+
+%integrated EMG 
+IEMG=zeros(total_emg_ack,1);
+%Mean Absolute Value
+MAV=zeros(total_emg_ack,1);
+%variance
+VAR=zeros(total_emg_ack,1);
+%Root Mean Square
+RMS=zeros(total_emg_ack,1);
+%simple square integral
+SSI=zeros(total_emg_ack,1);
+%Modified Median Frequency 改进的中值频率
+MF_median=zeros(total_emg_ack,1);
+%Modified Mean Frequency 平均功率频率
+MF_mean=zeros(total_emg_ack,1);
+%zero cross
+ZC=zeros(total_emg_ack,1);
+%slope sign change
+SSC=zeros(total_emg_ack,1);
+%waveform length
+WL=zeros(total_emg_ack,1);
+%Willison amplitude
+WAMP=zeros(total_emg_ack,1);
+%求四阶AR系数
+AR_coe=zeros(total_emg_ack,4);
+
+for i=1:1:total_emg_ack
+    x_temp = (segment_matrix(i,1)-1)*n:1:segment_matrix(i,2)*n;
+    y_temp = y((segment_matrix(i,1)-1)*n:segment_matrix(i,2)*n);
+    [L,H]=size(y_temp);
+    IEMG(i)=sum(abs(y_temp),1);%使用无偏
+    MAV(i)=mean(abs(y_temp),1);
+    VAR(i)=var(y_temp,1);%使用无偏方差
+    RMS(i)=std(y_temp,1);%使用无偏
+    SSI(i)=y_temp'*y_temp;%
+    WL(i) = sum(abs(y_temp(2:L)-y_temp(1:L-1)));
+    WAMP(i)=get_WAMP(y_temp);
+    plot(x_temp,y_temp,'b','LineWidth',0.5);
+    ZC(i) = get_ZC(y_temp);  
+    SSC(i)=get_ZC(sign(diff(y_temp)));
+    [AR_coe(i,1),AR_coe(i,2),AR_coe(i,3),AR_coe(i,4)]=EMG_AR( y_temp );
+end
+
+IEMG;
+MAV;
+VAR;
+RMS;
+SSI;
+SSC
+ZC
+AR_coe
+WL
+WAMP
+
