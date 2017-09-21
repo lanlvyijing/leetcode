@@ -1,4 +1,5 @@
 bool isNumber(string s) {
+
 	enum InputType
 	{
 		INVALID,    // 0
